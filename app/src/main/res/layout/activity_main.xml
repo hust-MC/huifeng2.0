@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
+
+    <!-- "体温管家" 点击区域：左上角，对应 UI 稿中文字位置 -->
+    <TextView
+        android:id="@+id/tv_body_feel"
+        android:layout_width="292.57px"
+        android:layout_height="123.19px"
+        android:layout_gravity="top|start"
+        android:layout_marginStart="61.65px"
+        android:layout_marginTop="288.39px"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/body_feel_manager" />
+
+</FrameLayout>

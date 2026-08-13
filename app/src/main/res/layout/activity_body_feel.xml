@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bodyfeel">
+
+    <!-- 前排主驾座位（ROW_1_LEFT = 0） -->
+    <ImageView
+        android:id="@+id/iv_seat_0"
+        android:layout_width="200px"
+        android:layout_height="200px"
+        android:layout_marginStart="480px"
+        android:layout_marginTop="306px" />
+
+    <!-- 前排副驾座位（ROW_1_RIGHT = 1） -->
+    <ImageView
+        android:id="@+id/iv_seat_1"
+        android:layout_width="200px"
+        android:layout_height="200px"
+        android:layout_marginStart="900px"
+        android:layout_marginTop="600px" />
+
+    <!-- 后排中间座位（ROW_2_LEFT = 2） -->
+    <ImageView
+        android:id="@+id/iv_seat_2"
+        android:layout_width="200px"
+        android:layout_height="200px"
+        android:layout_marginStart="1400px"
+        android:layout_marginTop="450px" />
+
+    <!-- 后排右侧座位（ROW_2_RIGHT = 3） -->
+    <ImageView
+        android:id="@+id/iv_seat_3"
+        android:layout_width="200px"
+        android:layout_height="200px"
+        android:layout_marginStart="1200px"
+        android:layout_marginTop="300px" />
+
+    <!-- 后排左侧座位（ROW_3_LEFT = 4） -->
+    <ImageView
+        android:id="@+id/iv_seat_4"
+        android:layout_width="200px"
+        android:layout_height="200px"
+        android:layout_marginStart="1700px"
+        android:layout_marginTop="600px" />
+
+</FrameLayout>
