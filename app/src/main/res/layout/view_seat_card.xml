@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_seat_card">
+
+    <!-- 左侧内容 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="18.9px"
+        android:orientation="vertical">
+
+        <!-- 顶部行：绿点 -->
+        <View
+            android:id="@+id/view_status_dot"
+            android:layout_width="10.8px"
+            android:layout_height="10.8px"
+            android:layout_marginTop="18.9px"
+            android:background="@drawable/bg_status_dot_unknown" />
+
+        <!-- 座位名 -->
+        <TextView
+            android:id="@+id/tv_seat_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18px"
+            android:text="主驾"
+            android:textColor="#314158"
+            android:textSize="28.8px"
+            android:textStyle="bold" />
+
+        <!-- "体感温度" 标签 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18px"
+            android:text="体感温度"
+            android:textColor="#90A1B9"
+            android:textSize="13.5px" />
+
+        <!-- 能量条区域 -->
+        <LinearLayout
+            android:id="@+id/energy_bar"
+            android:layout_width="match_parent"
+            android:layout_height="28px"
+            android:layout_marginTop="29px"
+            android:layout_marginEnd="18.9px"
+            android:orientation="horizontal">
+
+            <!-- 5个能量条分段 -->
+            <View
+                android:id="@+id/seg_0"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginEnd="4px"
+                android:background="@drawable/bg_energy_unselected" />
+
+            <View
+                android:id="@+id/seg_1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginEnd="4px"
+                android:background="@drawable/bg_energy_unselected" />
+
+            <View
+                android:id="@+id/seg_2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginEnd="4px"
+                android:background="@drawable/bg_energy_unselected" />
+
+            <View
+                android:id="@+id/seg_3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginEnd="4px"
+                android:background="@drawable/bg_energy_unselected" />
+
+            <View
+                android:id="@+id/seg_4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/bg_energy_unselected" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 右侧体感标识图标（叠加在最上层右侧） -->
+    <ImageView
+        android:id="@+id/iv_comfort_icon"
+        android:layout_width="75.6px"
+        android:layout_height="75.6px"
+        android:layout_gravity="end|center_vertical"
+        android:layout_marginEnd="30px"
+        android:scaleType="fitCenter"
+        android:src="@drawable/comfortable" />
+
+</FrameLayout>

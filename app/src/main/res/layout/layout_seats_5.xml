@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 5座布局：后排3人。FrameLayout 内顺序：后排 -> 前排，前排在上层 -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 后排右（ROW_2_RIGHT = 3） -->
+    <ImageView
+        android:id="@+id/iv_seat_5_3"
+        android:layout_width="706.5px"
+        android:layout_height="1036.8px"
+        android:layout_marginStart="884.34px"
+        android:layout_marginTop="105.54px"
+        android:src="@drawable/body" />
+
+    <!-- 后排中（ROW_2_LEFT = 2） -->
+    <ImageView
+        android:id="@+id/iv_seat_5_2"
+        android:layout_width="706.5px"
+        android:layout_height="1036.8px"
+        android:layout_marginStart="1162.3px"
+        android:layout_marginTop="262.75px"
+        android:src="@drawable/body" />
+
+    <!-- 后排左（ROW_3_LEFT = 4） -->
+    <ImageView
+        android:id="@+id/iv_seat_5_4"
+        android:layout_width="706.5px"
+        android:layout_height="1036.8px"
+        android:layout_marginStart="1413.45px"
+        android:layout_marginTop="392.65px"
+        android:src="@drawable/body" />
+
+    <!-- 前排右（ROW_1_RIGHT = 1） -->
+    <ImageView
+        android:id="@+id/iv_seat_5_1"
+        android:layout_width="706.5px"
+        android:layout_height="1036.8px"
+        android:layout_marginStart="442.05px"
+        android:layout_marginTop="296.47px"
+        android:src="@drawable/body" />
+
+    <!-- 前排左（ROW_1_LEFT = 0） -->
+    <ImageView
+        android:id="@+id/iv_seat_5_0"
+        android:layout_width="706.5px"
+        android:layout_height="1036.8px"
+        android:layout_marginStart="763.1px"
+        android:layout_marginTop="493.34px"
+        android:src="@drawable/body" />
+
+</FrameLayout>

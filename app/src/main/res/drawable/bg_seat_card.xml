@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 6% 黑色 = #0F000000 -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#0F000000" />
+            <corners android:radius="1.5px" />
+            <stroke
+                android:width="1.5px"
+                android:color="#0F000000" />
+        </shape>
+    </item>
+    <item
+        android:left="1.5px"
+        android:top="1.5px"
+        android:right="1.5px"
+        android:bottom="1.5px">
+        <shape android:shape="rectangle">
+            <solid android:color="#E5EBF4" />
+            <corners android:radius="1.5px" />
+        </shape>
+    </item>
+</layer-list>

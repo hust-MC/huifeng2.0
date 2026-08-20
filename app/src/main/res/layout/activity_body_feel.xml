@@ -2,46 +2,104 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bodyfeel">
+    android:background="@drawable/bg_body_feel">
 
-    <!-- 前排主驾座位（ROW_1_LEFT = 0） -->
+    <!-- 左侧标题 -->
     <ImageView
-        android:id="@+id/iv_seat_0"
-        android:layout_width="200px"
-        android:layout_height="200px"
-        android:layout_marginStart="480px"
-        android:layout_marginTop="306px" />
+        android:layout_width="615px"
+        android:layout_height="64px"
+        android:layout_marginStart="80px"
+        android:layout_marginTop="124px"
+        android:src="@drawable/title_bodyfeel" />
 
-    <!-- 前排副驾座位（ROW_1_RIGHT = 1） -->
+    <!-- 方向盘 -->
     <ImageView
-        android:id="@+id/iv_seat_1"
-        android:layout_width="200px"
-        android:layout_height="200px"
-        android:layout_marginStart="900px"
-        android:layout_marginTop="600px" />
+        android:layout_width="272px"
+        android:layout_height="282px"
+        android:layout_marginStart="224px"
+        android:layout_marginTop="928px"
+        android:src="@drawable/steeringwheel" />
 
-    <!-- 后排中间座位（ROW_2_LEFT = 2） -->
-    <ImageView
-        android:id="@+id/iv_seat_2"
-        android:layout_width="200px"
-        android:layout_height="200px"
-        android:layout_marginStart="1400px"
-        android:layout_marginTop="450px" />
+    <!-- 座位图容器 -->
+    <FrameLayout
+        android:id="@+id/seat_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-    <!-- 后排右侧座位（ROW_2_RIGHT = 3） -->
-    <ImageView
-        android:id="@+id/iv_seat_3"
-        android:layout_width="200px"
-        android:layout_height="200px"
-        android:layout_marginStart="1200px"
-        android:layout_marginTop="300px" />
+    <!-- ========== 底部 4 张卡片 ========== -->
+    <!-- 4×420 + 3×40 = 1800px，marginLeft=380，marginRight=380，共 2560px -->
 
-    <!-- 后排左侧座位（ROW_3_LEFT = 4） -->
-    <ImageView
-        android:id="@+id/iv_seat_4"
-        android:layout_width="200px"
-        android:layout_height="200px"
-        android:layout_marginStart="1700px"
-        android:layout_marginTop="600px" />
+    <!-- 卡片1：前排主驾 ROW_1_LEFT -->
+    <include
+        android:id="@+id/card_seat_0"
+        layout="@layout/view_seat_card"
+        android:layout_width="420px"
+        android:layout_height="216px"
+        android:layout_gravity="bottom|start"
+        android:layout_marginStart="380px"
+        android:layout_marginBottom="192px" />
+
+    <!-- 卡片2：前排副驾 ROW_1_RIGHT -->
+    <include
+        android:id="@+id/card_seat_1"
+        layout="@layout/view_seat_card"
+        android:layout_width="420px"
+        android:layout_height="216px"
+        android:layout_gravity="bottom|start"
+        android:layout_marginStart="840px"
+        android:layout_marginBottom="192px" />
+
+    <!-- 卡片3：后排右侧 ROW_2_RIGHT -->
+    <include
+        android:id="@+id/card_seat_3"
+        layout="@layout/view_seat_card"
+        android:layout_width="420px"
+        android:layout_height="216px"
+        android:layout_gravity="bottom|start"
+        android:layout_marginStart="1300px"
+        android:layout_marginBottom="192px" />
+
+    <!-- 卡片4：后排左侧 ROW_3_LEFT -->
+    <include
+        android:id="@+id/card_seat_4"
+        layout="@layout/view_seat_card"
+        android:layout_width="420px"
+        android:layout_height="216px"
+        android:layout_gravity="bottom|start"
+        android:layout_marginStart="1760px"
+        android:layout_marginBottom="192px" />
+
+    <!-- ========== 通用层（最上层） ========== -->
+
+    <!-- 顶部状态栏 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="92.8px"
+        android:background="#33FFFFFF" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="92.8px"
+        android:layout_gravity="center_horizontal|top"
+        android:gravity="center"
+        android:text="状态栏"
+        android:textColor="#9D9292"
+        android:textSize="32px" />
+
+    <!-- 底部 Dock 栏 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="147px"
+        android:layout_gravity="bottom"
+        android:background="#33FFFFFF" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="147px"
+        android:layout_gravity="center_horizontal|bottom"
+        android:gravity="center"
+        android:text="DOCK栏"
+        android:textColor="#888080"
+        android:textSize="32px" />
 
 </FrameLayout>
