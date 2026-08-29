@@ -4,18 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- 后排右（ROW_2_RIGHT = 3） -->
+    <!-- 后排右（ROW_2_RIGHT = 4） -->
     <ImageView
-        android:id="@+id/iv_seat_4_3"
+        android:id="@+id/iv_seat_4_4"
         android:layout_width="785px"
         android:layout_height="1152px"
         android:layout_marginStart="1032.91px"
         android:layout_marginTop="167.92px"
         android:src="@drawable/body" />
 
-    <!-- 后排左（ROW_3_LEFT = 4） -->
+    <!-- 后排左（ROW_3_LEFT = 5） -->
     <ImageView
-        android:id="@+id/iv_seat_4_4"
+        android:id="@+id/iv_seat_4_5"
         android:layout_width="785px"
         android:layout_height="1152px"
         android:layout_marginStart="1366.79px"

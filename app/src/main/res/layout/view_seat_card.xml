@@ -91,13 +91,11 @@
     </LinearLayout>
 
     <!-- 右侧体感标识图标（叠加在最上层右侧） -->
-    <ImageView
+    <com.max.huifeng.ComfortIconView
         android:id="@+id/iv_comfort_icon"
         android:layout_width="75.6px"
         android:layout_height="75.6px"
         android:layout_gravity="end|center_vertical"
-        android:layout_marginEnd="30px"
-        android:scaleType="fitCenter"
-        android:src="@drawable/comfortable" />
+        android:layout_marginEnd="30px" />
 
 </FrameLayout>

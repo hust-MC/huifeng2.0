@@ -51,7 +51,7 @@
 
     <!-- 卡片3：后排右侧 ROW_2_RIGHT -->
     <include
-        android:id="@+id/card_seat_3"
+        android:id="@+id/card_seat_4"
         layout="@layout/view_seat_card"
         android:layout_width="420px"
         android:layout_height="216px"
@@ -61,7 +61,7 @@
 
     <!-- 卡片4：后排左侧 ROW_3_LEFT -->
     <include
-        android:id="@+id/card_seat_4"
+        android:id="@+id/card_seat_5"
         layout="@layout/view_seat_card"
         android:layout_width="420px"
         android:layout_height="216px"
@@ -70,21 +70,6 @@
         android:layout_marginBottom="192px" />
 
     <!-- ========== 通用层（最上层） ========== -->
-
-    <!-- 顶部状态栏 -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="92.8px"
-        android:background="#33FFFFFF" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="92.8px"
-        android:layout_gravity="center_horizontal|top"
-        android:gravity="center"
-        android:text="状态栏"
-        android:textColor="#9D9292"
-        android:textSize="32px" />
 
     <!-- 底部 Dock 栏 -->
     <View
