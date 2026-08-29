@@ -7,6 +7,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.geely.aicarcontrolsdk.AiCarControlSDK
 import com.geely.aicarcontrolsdk.ComfortLevelCallback
 import com.geely.aicarcontrolsdk.Position
@@ -74,6 +77,14 @@ class BodyFeelActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // 沉浸式全屏：内容延伸到系统栏背后，并隐藏状态栏与导航栏
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowInsetsControllerCompat(window, window.decorView).apply {
+            hide(WindowInsetsCompat.Type.systemBars())
+            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
+
         setContentView(R.layout.activity_body_feel)
 
         bindCardViews()
@@ -155,33 +166,47 @@ class BodyFeelActivity : AppCompatActivity() {
     private fun updateSeatAndCard(position: Int, comfortLevelJson: String?) {
         val cb = cardViews[position] ?: return
         val level = jsonToLevel(comfortLevelJson)
-        val (dotRes, _) = getComfortDrawable(level)
-        cb.viewDot.setBackgroundResource(dotRes)
+        cb.viewDot.setBackgroundResource(dotResFor(level))
+        // 体感卡片要进入「无人」状态时，用合适档位占位（绿），避免显示错乱
         cb.comfortIcon.setComfortLevel(level ?: ComfortIconView.LEVEL_JUST_RIGHT)
         updateEnergyBar(level, cb.energyBar)
     }
 
-    private fun getComfortDrawable(level: Int?): Pair<Int, Int> = when {
-        level == null                          -> Pair(R.drawable.bg_status_dot_unknown, R.drawable.comfortable)
-        level <= -1                            -> Pair(R.drawable.bg_status_dot_cool, R.drawable.comfortable)
-        level in 0..1                          -> Pair(R.drawable.bg_status_dot_active, R.drawable.comfortable)
-        else                                   -> Pair(R.drawable.bg_status_dot_warm, R.drawable.warmish)
+    /**
+     * 左侧小圆点颜色与右侧 ComfortIconView 主色严格 1:1 对齐。
+     * 取整到 5 档后映射到同名颜色 drawable。
+     */
+    private fun dotResFor(level: Int?): Int = when {
+        level == null                           -> R.drawable.bg_status_dot_unknown
+        level <= ComfortIconView.LEVEL_COOL     -> R.drawable.bg_status_dot_cool
+        level == ComfortIconView.LEVEL_SLIGHTLY_COOL -> R.drawable.bg_status_dot_slightly_cool
+        level == ComfortIconView.LEVEL_JUST_RIGHT -> R.drawable.bg_status_dot_active
+        level == ComfortIconView.LEVEL_SLIGHTLY_WARM -> R.drawable.bg_status_dot_slightly_warm
+        else /* >= WARM */                      -> R.drawable.bg_status_dot_warm
     }
 
     private fun updateEnergyBar(level: Int?, container: LinearLayout) {
-        // 5段能量条：-2/-1 -> 索引0-1(蓝色), 0-1 -> 索引2(绿色), 2 -> 索引3(橙色), >=3 -> 索引4(红色)
-        val activeIndex = when {
-            level == null                          -> -1
-            level <= -2                            -> 0
-            level == -1                            -> 1
-            level in 0..1                          -> 2
-            level == 2                             -> 3
-            else                                   -> 4
+        // 5 段能量条按"温度计累进"语义：每升一档多亮一节
+        //   null      -> 全灰（无数据）
+        //   -2 凉     -> 1 段
+        //   -1 稍凉   -> 2 段
+        //    0 合适   -> 3 段（居中）
+        //    1 稍暖   -> 4 段
+        //    2 暖     -> 5 段
+        val activeCount = when (level) {
+            null                                 -> 0
+            ComfortIconView.LEVEL_COOL           -> 1
+            ComfortIconView.LEVEL_SLIGHTLY_COOL  -> 2
+            ComfortIconView.LEVEL_JUST_RIGHT     -> 3
+            ComfortIconView.LEVEL_SLIGHTLY_WARM  -> 4
+            else /* LEVEL_WARM or higher */      -> 5
         }
         val selectedBg = R.drawable.bg_energy_selected
         val unselectedBg = R.drawable.bg_energy_unselected
         for (i in 0 until container.childCount) {
-            container.getChildAt(i).setBackgroundResource(if (i == activeIndex) selectedBg else unselectedBg)
+            container.getChildAt(i).setBackgroundResource(
+                if (i < activeCount) selectedBg else unselectedBg
+            )
         }
     }
 
