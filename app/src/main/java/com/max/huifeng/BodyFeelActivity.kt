@@ -59,11 +59,11 @@ class BodyFeelActivity : AppCompatActivity() {
 
     // Position -> 卡片显示名
     private val positionCardNames = mapOf(
-        Position.ROW_1_LEFT  to "主驾",
+        Position.ROW_1_LEFT to "主驾",
         Position.ROW_1_RIGHT to "副驾",
         Position.ROW_2_RIGHT to "后排右",
-        Position.ROW_3_LEFT  to "后排左",
-        Position.ROW_2_LEFT  to "后排中"
+        Position.ROW_3_LEFT to "后排左",
+        Position.ROW_2_LEFT to "后排中"
     )
 
     // 辅助类：封装卡片内部 View
@@ -91,16 +91,20 @@ class BodyFeelActivity : AppCompatActivity() {
         inflateSeatLayout()
 
         Log.i(TAG, "开始初始化 AiCarControlSDK...")
-        AiCarControlSDK.init(this, needRetry = true, object : AiCarControlSDK.ConnectCallback {
-            override fun onConnect(isConnected: Boolean) {
-                Log.i(TAG, "SDK 连接状态: connected=$isConnected")
-                if (isConnected) {
-                    onSdkConnected()
-                } else {
-                    Log.w(TAG, "SDK 连接断开，等待自动重连...")
+        try {
+            AiCarControlSDK.init(this, needRetry = true, object : AiCarControlSDK.ConnectCallback {
+                override fun onConnect(isConnected: Boolean) {
+                    Log.i(TAG, "SDK 连接状态: connected=$isConnected")
+                    if (isConnected) {
+                        onSdkConnected()
+                    } else {
+                        Log.w(TAG, "SDK 连接断开，等待自动重连...")
+                    }
                 }
-            }
-        })
+            })
+        } catch (e: Exception) {
+            Log.e(TAG, "SDK 连接错误: e", e)
+        }
     }
 
     /**
@@ -170,7 +174,7 @@ class BodyFeelActivity : AppCompatActivity() {
                 comfortIcon = root.findViewById(R.id.iv_comfort_icon)
             )
         }.filterValues { it != null }
-         .mapValues { (_, v) -> v!! }
+            .mapValues { (_, v) -> v!! }
 
         cardViews.forEach { (pos, cb) ->
             cb.tvName.text = positionCardNames[pos] ?: "未知"
@@ -197,14 +201,17 @@ class BodyFeelActivity : AppCompatActivity() {
     private fun updateSeatAndCard(position: Int, comfortLevelJson: String?) {
         val cb = cardViews[position]
         if (cb == null) {
-            Log.w(TAG, "updateSeatAndCard: 未找到 position=$position 对应的卡片，可能该座位不在当前车型中")
+            Log.w(
+                TAG,
+                "updateSeatAndCard: 未找到 position=$position 对应的卡片，可能该座位不在当前车型中"
+            )
             return
         }
-        
+
         val level = jsonToLevel(comfortLevelJson)
         val seatName = positionCardNames[position] ?: "座位$position"
         Log.d(TAG, "刷新卡片: $seatName (pos=$position), level=$level")
-        
+
         cb.viewDot.setBackgroundResource(dotResFor(level))
         // 体感卡片要进入「无人」状态时，用合适档位占位（绿），避免显示错乱
         cb.comfortIcon.setComfortLevel(level ?: ComfortIconView.LEVEL_JUST_RIGHT)
@@ -216,12 +223,12 @@ class BodyFeelActivity : AppCompatActivity() {
      * 取整到 5 档后映射到同名颜色 drawable。
      */
     private fun dotResFor(level: Int?): Int = when {
-        level == null                           -> R.drawable.bg_status_dot_unknown
-        level <= ComfortIconView.LEVEL_COOL     -> R.drawable.bg_status_dot_cool
+        level == null -> R.drawable.bg_status_dot_unknown
+        level <= ComfortIconView.LEVEL_COOL -> R.drawable.bg_status_dot_cool
         level == ComfortIconView.LEVEL_SLIGHTLY_COOL -> R.drawable.bg_status_dot_slightly_cool
         level == ComfortIconView.LEVEL_JUST_RIGHT -> R.drawable.bg_status_dot_active
         level == ComfortIconView.LEVEL_SLIGHTLY_WARM -> R.drawable.bg_status_dot_slightly_warm
-        else /* >= WARM */                      -> R.drawable.bg_status_dot_warm
+        else /* >= WARM */ -> R.drawable.bg_status_dot_warm
     }
 
     private fun updateEnergyBar(level: Int?, container: LinearLayout) {
@@ -233,12 +240,12 @@ class BodyFeelActivity : AppCompatActivity() {
         //    1 稍暖   -> 4 段
         //    2 暖     -> 5 段
         val activeCount = when (level) {
-            null                                 -> 0
-            ComfortIconView.LEVEL_COOL           -> 1
-            ComfortIconView.LEVEL_SLIGHTLY_COOL  -> 2
-            ComfortIconView.LEVEL_JUST_RIGHT     -> 3
-            ComfortIconView.LEVEL_SLIGHTLY_WARM  -> 4
-            else /* LEVEL_WARM or higher */      -> 5
+            null -> 0
+            ComfortIconView.LEVEL_COOL -> 1
+            ComfortIconView.LEVEL_SLIGHTLY_COOL -> 2
+            ComfortIconView.LEVEL_JUST_RIGHT -> 3
+            ComfortIconView.LEVEL_SLIGHTLY_WARM -> 4
+            else /* LEVEL_WARM or higher */ -> 5
         }
         val selectedBg = R.drawable.bg_energy_selected
         val unselectedBg = R.drawable.bg_energy_unselected
@@ -260,11 +267,11 @@ class BodyFeelActivity : AppCompatActivity() {
             if (!obj.has("Ovr")) return null
             val ovr = obj.getDouble("Ovr")
             when {
-                ovr <= -0.4  -> ComfortIconView.LEVEL_COOL          // -2 凉
+                ovr <= -0.4 -> ComfortIconView.LEVEL_COOL          // -2 凉
                 ovr <= -0.05 -> ComfortIconView.LEVEL_SLIGHTLY_COOL // -1 稍凉
-                ovr < 0.05   -> ComfortIconView.LEVEL_JUST_RIGHT    //  0 合适
-                ovr < 0.4    -> ComfortIconView.LEVEL_SLIGHTLY_WARM //  1 稍暖
-                else         -> ComfortIconView.LEVEL_WARM          //  2 暖
+                ovr < 0.05 -> ComfortIconView.LEVEL_JUST_RIGHT    //  0 合适
+                ovr < 0.4 -> ComfortIconView.LEVEL_SLIGHTLY_WARM //  1 稍暖
+                else -> ComfortIconView.LEVEL_WARM          //  2 暖
             }
         } catch (e: Exception) {
             Log.w(TAG, "jsonToLevel 解析失败: $json", e)
@@ -275,12 +282,12 @@ class BodyFeelActivity : AppCompatActivity() {
     /** 给模拟数据构造一个最小可用的 JSON（只设 Ovr 和 Validity） */
     private fun jsonFor(level: Int): String {
         val ovr = when (level) {
-            ComfortIconView.LEVEL_COOL          -> -0.6
+            ComfortIconView.LEVEL_COOL -> -0.6
             ComfortIconView.LEVEL_SLIGHTLY_COOL -> -0.2
-            ComfortIconView.LEVEL_JUST_RIGHT    -> 0.0
+            ComfortIconView.LEVEL_JUST_RIGHT -> 0.0
             ComfortIconView.LEVEL_SLIGHTLY_WARM -> 0.2
-            ComfortIconView.LEVEL_WARM          -> 0.6
-            else                                -> 0.0
+            ComfortIconView.LEVEL_WARM -> 0.6
+            else -> 0.0
         }
         return """{"Ovr":$ovr,"Validity":1}"""
     }
