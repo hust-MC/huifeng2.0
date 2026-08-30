@@ -28,7 +28,7 @@ class BodyFeelActivity : AppCompatActivity() {
          * true  -> 首次拉取用本地构造的 JSON，方便无真机/无信号时调试 UI
          * false -> 直接走 SDK getComfortLevel() 拿真实数据（默认）
          */
-        private const val USE_MOCK = true
+        private const val USE_MOCK = false
     }
 
     private lateinit var seatViews: Map<Int, ImageView>
@@ -90,13 +90,38 @@ class BodyFeelActivity : AppCompatActivity() {
         bindCardViews()
         inflateSeatLayout()
 
+        Log.i(TAG, "开始初始化 AiCarControlSDK...")
+        AiCarControlSDK.init(this, needRetry = true, object : AiCarControlSDK.ConnectCallback {
+            override fun onConnect(isConnected: Boolean) {
+                Log.i(TAG, "SDK 连接状态: connected=$isConnected")
+                if (isConnected) {
+                    onSdkConnected()
+                } else {
+                    Log.w(TAG, "SDK 连接断开，等待自动重连...")
+                }
+            }
+        })
+    }
+
+    /**
+     * SDK 连接成功后的初始化：注册回调 + 首次拉取数据。
+     * SDK 会自动重连并重挂回调，所以这里只需执行一次。
+     */
+    private fun onSdkConnected() {
+        Log.i(TAG, "========== SDK 已连接，开始注册回调与拉取数据 ==========")
+
         // 注册舒适度回调（新 SDK 回调第二参为 JSON 字符串）
         AiCarControlSDK.registerComfortLevelCallback(object : ComfortLevelCallback {
             override fun onComfortLevelChanged(position: Int, comfortLevel: String?) {
                 Log.i(TAG, "【回调】pos=$position, json=$comfortLevel")
-                runOnUiThread { updateSeatAndCard(position, comfortLevel) }
+                try {
+                    runOnUiThread { updateSeatAndCard(position, comfortLevel) }
+                } catch (e: Exception) {
+                    Log.e(TAG, "回调处理失败: pos=$position", e)
+                }
             }
         })
+        Log.i(TAG, "体感回调已注册")
 
         // 首次拉取所有座位舒适度（新 SDK 返回 List<String?>，以 Position 为索引）
         Log.i(TAG, "========== 首次拉取所有座位舒适度（USE_MOCK=$USE_MOCK） ==========")
@@ -119,6 +144,12 @@ class BodyFeelActivity : AppCompatActivity() {
             updateSeatAndCard(pos, json)
         }
         Log.i(TAG, "============================================")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i(TAG, "Activity 销毁，释放 SDK 连接")
+        AiCarControlSDK.release()
     }
 
     private fun bindCardViews() {
@@ -164,8 +195,16 @@ class BodyFeelActivity : AppCompatActivity() {
     }
 
     private fun updateSeatAndCard(position: Int, comfortLevelJson: String?) {
-        val cb = cardViews[position] ?: return
+        val cb = cardViews[position]
+        if (cb == null) {
+            Log.w(TAG, "updateSeatAndCard: 未找到 position=$position 对应的卡片，可能该座位不在当前车型中")
+            return
+        }
+        
         val level = jsonToLevel(comfortLevelJson)
+        val seatName = positionCardNames[position] ?: "座位$position"
+        Log.d(TAG, "刷新卡片: $seatName (pos=$position), level=$level")
+        
         cb.viewDot.setBackgroundResource(dotResFor(level))
         // 体感卡片要进入「无人」状态时，用合适档位占位（绿），避免显示错乱
         cb.comfortIcon.setComfortLevel(level ?: ComfortIconView.LEVEL_JUST_RIGHT)
