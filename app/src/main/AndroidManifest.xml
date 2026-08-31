@@ -2,7 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <queries>
+        <package android:name="com.geely.aicarcontrol" />
+    </queries>
+
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -15,9 +20,9 @@
 
         <activity
             android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="true"
-            android:screenOrientation="sensorLandscape"
-            android:configChanges="orientation|screenSize|keyboardHidden">
+            android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -26,9 +31,9 @@
 
         <activity
             android:name=".BodyFeelActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false"
-            android:screenOrientation="sensorLandscape"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:screenOrientation="sensorLandscape" />
 
     </application>
 

@@ -90,31 +90,23 @@ class BodyFeelActivity : AppCompatActivity() {
         bindCardViews()
         inflateSeatLayout()
 
-        Log.i(TAG, "开始初始化 AiCarControlSDK...")
-        try {
-            AiCarControlSDK.init(this, needRetry = true, object : AiCarControlSDK.ConnectCallback {
-                override fun onConnect(isConnected: Boolean) {
-                    Log.i(TAG, "SDK 连接状态: connected=$isConnected")
-                    if (isConnected) {
-                        onSdkConnected()
-                    } else {
-                        Log.w(TAG, "SDK 连接断开，等待自动重连...")
-                    }
-                }
-            })
-        } catch (e: Exception) {
-            Log.e(TAG, "SDK 连接错误: e", e)
+        // SDK 已在 Application 中初始化，这里只负责注册回调 + 拉取数据
+        Log.i(TAG, "Activity 启动，注册体感回调...")
+        registerComfortCallback()
+
+        // 如果 SDK 已连接，立即拉取数据；否则等待回调触发
+        if (AiCarControlSDK.isConnected()) {
+            Log.i(TAG, "SDK 已连接，立即拉取初始数据")
+            loadInitialData()
+        } else {
+            Log.i(TAG, "SDK 尚未连接，等待回调推送数据")
         }
     }
 
     /**
-     * SDK 连接成功后的初始化：注册回调 + 首次拉取数据。
-     * SDK 会自动重连并重挂回调，所以这里只需执行一次。
+     * 注册舒适度回调。SDK 会自动重连并重挂回调，Activity 重建后需重新注册。
      */
-    private fun onSdkConnected() {
-        Log.i(TAG, "========== SDK 已连接，开始注册回调与拉取数据 ==========")
-
-        // 注册舒适度回调（新 SDK 回调第二参为 JSON 字符串）
+    private fun registerComfortCallback() {
         AiCarControlSDK.registerComfortLevelCallback(object : ComfortLevelCallback {
             override fun onComfortLevelChanged(position: Int, comfortLevel: String?) {
                 Log.i(TAG, "【回调】pos=$position, json=$comfortLevel")
@@ -126,8 +118,12 @@ class BodyFeelActivity : AppCompatActivity() {
             }
         })
         Log.i(TAG, "体感回调已注册")
+    }
 
-        // 首次拉取所有座位舒适度（新 SDK 返回 List<String?>，以 Position 为索引）
+    /**
+     * 首次拉取所有座位舒适度数据并更新界面
+     */
+    private fun loadInitialData() {
         Log.i(TAG, "========== 首次拉取所有座位舒适度（USE_MOCK=$USE_MOCK） ==========")
         val levels = AiCarControlSDK.getComfortLevel()
         val positions = visiblePositionsBySeatCount[SEAT_COUNT] ?: emptyList()
@@ -143,17 +139,11 @@ class BodyFeelActivity : AppCompatActivity() {
         for ((index, pos) in positions.withIndex()) {
             val name = positionCardNames[pos] ?: "未知"
             // USE_MOCK=true 时优先用 mockJson；否则（或用完）直接走 SDK 真实数据
-            val json = mockJson.getOrNull(index) ?: levels.getOrNull(pos)
+            val json = mockJson.getOrNull(index) ?: levels?.getOrNull(pos)
             Log.i(TAG, "【初始】$name (pos=$pos), json=$json")
             updateSeatAndCard(pos, json)
         }
         Log.i(TAG, "============================================")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.i(TAG, "Activity 销毁，释放 SDK 连接")
-        AiCarControlSDK.release()
     }
 
     private fun bindCardViews() {
