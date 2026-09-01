@@ -16,7 +16,7 @@ import kotlin.random.Random
 object MockComfortJson {
 
     /** mock 总开关。BodyFeelActivity / SeatDetailActivity 都读这个常量。 */
-    const val USE_MOCK = true
+    const val USE_MOCK = false
 
     private val SINGLES = listOf("Head", "Face", "Neck", "Chest", "Back", "Abdomen")
     private data class Paired(val left: String, val right: String)
