@@ -35,7 +35,7 @@ class ComfortIconView @JvmOverloads constructor(
         private const val TEXT_SLIGHTLY_WARM = "稍暖"
         private const val TEXT_WARM = "暖"
 
-        private fun getColor(level: Int): Int = when (level) {
+        fun getColor(level: Int): Int = when (level) {
             LEVEL_COOL -> COLOR_COOL
             LEVEL_SLIGHTLY_COOL -> COLOR_SLIGHTLY_COOL
             LEVEL_JUST_RIGHT -> COLOR_JUST_RIGHT

@@ -5,48 +5,108 @@
     android:layout_height="match_parent">
 
     <!-- 后排右（ROW_2_RIGHT = 3） -->
-    <ImageView
-        android:id="@+id/iv_seat_5_3"
+    <FrameLayout
         android:layout_width="706.5px"
         android:layout_height="1036.8px"
         android:layout_marginStart="884.34px"
-        android:layout_marginTop="105.54px"
-        android:src="@drawable/body" />
+        android:layout_marginTop="105.54px">
+
+        <ImageView
+            android:id="@+id/iv_seat_5_3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/body" />
+
+        <com.max.huifeng.SeatOverlayView
+            android:id="@+id/seat_overlay_5_3"
+            android:layout_width="216px"
+            android:layout_height="342px"
+            android:layout_marginStart="312px"
+            android:layout_marginTop="220px" />
+    </FrameLayout>
 
     <!-- 后排中（ROW_2_LEFT = 2） -->
-    <ImageView
-        android:id="@+id/iv_seat_5_2"
+    <FrameLayout
         android:layout_width="706.5px"
         android:layout_height="1036.8px"
         android:layout_marginStart="1162.3px"
-        android:layout_marginTop="262.75px"
-        android:src="@drawable/body" />
+        android:layout_marginTop="262.75px">
+
+        <ImageView
+            android:id="@+id/iv_seat_5_2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/body" />
+
+        <com.max.huifeng.SeatOverlayView
+            android:id="@+id/seat_overlay_5_2"
+            android:layout_width="216px"
+            android:layout_height="342px"
+            android:layout_marginStart="312px"
+            android:layout_marginTop="220px" />
+    </FrameLayout>
 
     <!-- 后排左（ROW_3_LEFT = 4） -->
-    <ImageView
-        android:id="@+id/iv_seat_5_4"
+    <FrameLayout
         android:layout_width="706.5px"
         android:layout_height="1036.8px"
         android:layout_marginStart="1413.45px"
-        android:layout_marginTop="392.65px"
-        android:src="@drawable/body" />
+        android:layout_marginTop="392.65px">
+
+        <ImageView
+            android:id="@+id/iv_seat_5_4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/body" />
+
+        <com.max.huifeng.SeatOverlayView
+            android:id="@+id/seat_overlay_5_4"
+            android:layout_width="216px"
+            android:layout_height="342px"
+            android:layout_marginStart="312px"
+            android:layout_marginTop="220px" />
+    </FrameLayout>
 
     <!-- 前排右（ROW_1_RIGHT = 1） -->
-    <ImageView
-        android:id="@+id/iv_seat_5_1"
+    <FrameLayout
         android:layout_width="706.5px"
         android:layout_height="1036.8px"
         android:layout_marginStart="442.05px"
-        android:layout_marginTop="296.47px"
-        android:src="@drawable/body" />
+        android:layout_marginTop="296.47px">
+
+        <ImageView
+            android:id="@+id/iv_seat_5_1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/body" />
+
+        <com.max.huifeng.SeatOverlayView
+            android:id="@+id/seat_overlay_5_1"
+            android:layout_width="216px"
+            android:layout_height="342px"
+            android:layout_marginStart="312px"
+            android:layout_marginTop="220px" />
+    </FrameLayout>
 
     <!-- 前排左（ROW_1_LEFT = 0） -->
-    <ImageView
-        android:id="@+id/iv_seat_5_0"
+    <FrameLayout
         android:layout_width="706.5px"
         android:layout_height="1036.8px"
         android:layout_marginStart="763.1px"
-        android:layout_marginTop="493.34px"
-        android:src="@drawable/body" />
+        android:layout_marginTop="493.34px">
+
+        <ImageView
+            android:id="@+id/iv_seat_5_0"
+            android:layout_width="match_parent"
+            android_height="match_parent"
+            android:src="@drawable/body" />
+
+        <com.max.huifeng.SeatOverlayView
+            android:id="@+id/seat_overlay_5_0"
+            android:layout_width="216px"
+            android:layout_height="342px"
+            android:layout_marginStart="312px"
+            android:layout_marginTop="220px" />
+    </FrameLayout>
 
 </FrameLayout>
