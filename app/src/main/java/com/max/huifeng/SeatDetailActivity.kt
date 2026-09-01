@@ -4,10 +4,10 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
-import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.GridLayout
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
@@ -87,6 +87,8 @@ class SeatDetailActivity : AppCompatActivity() {
     /** 12 张卡片右下角的体感文字（凉/稍凉/合适/稍暖/暖），颜色随等级 */
     private val partLabels: MutableMap<BodyPart12, TextView> = linkedMapOf()
 
+    private val partIcons: MutableMap<BodyPart12, ImageView> = linkedMapOf()
+
     private var currentPosition: Int = Position.ROW_1_LEFT
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,6 +121,7 @@ class SeatDetailActivity : AppCompatActivity() {
     private fun bindPartCards() {
         partCards.clear()
         partLabels.clear()
+        partIcons.clear()
         val labelMarginLeft = 119
         val labelMarginTop = 84
 
@@ -136,10 +139,25 @@ class SeatDetailActivity : AppCompatActivity() {
             BodyPart12.CALF to R.id.card_calf,
             BodyPart12.FOOT to R.id.card_foot
         )
+        val iconIdMap = mapOf(
+            BodyPart12.HEAD to R.id.card_head_icon,
+            BodyPart12.FACE to R.id.card_face_icon,
+            BodyPart12.NECK to R.id.card_neck_icon,
+            BodyPart12.SHOULDER to R.id.card_shoulder_icon,
+            BodyPart12.CHEST to R.id.card_chest_icon,
+            BodyPart12.BACK to R.id.card_back_icon,
+            BodyPart12.ABDOMEN to R.id.card_abdomen_icon,
+            BodyPart12.ARM to R.id.card_arm_icon,
+            BodyPart12.HAND to R.id.card_hand_icon,
+            BodyPart12.THIGH to R.id.card_thigh_icon,
+            BodyPart12.CALF to R.id.card_calf_icon,
+            BodyPart12.FOOT to R.id.card_foot_icon
+        )
 
         idMap.forEach { (part, resId) ->
             val card = findViewById<FrameLayout>(resId)
             partCards[part] = card
+            partIcons[part] = findViewById(iconIdMap.getValue(part))
 
             val label = TextView(this).apply {
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, 14.04f)
@@ -208,11 +226,6 @@ class SeatDetailActivity : AppCompatActivity() {
         applyCardsByJson(json)
     }
 
-    /**
-     * 加载当前座位的体感数据。
-     * 当前为 mock：每个 position 给一个固定的体感等级 + 配套的温/湿/PMV/PPD。
-     * TODO：等 SDK 提供 HVAC / 温/湿 字段后，把 MOCK_BY_POSITION 替换为 SDK getComfortLevelAt + 空调回调。
-     */
     private fun loadSeatData() {
         val data = MOCK_BY_POSITION[currentPosition]
             ?: MockSeatData(ComfortIconView.LEVEL_JUST_RIGHT, 25.0, 45.0, 0.0)
@@ -283,10 +296,13 @@ class SeatDetailActivity : AppCompatActivity() {
         val values = BodyPart12.parse(json)
         partCards.forEach { (part, view) ->
             val label = partLabels[part] ?: return@forEach
+            val icon = partIcons[part]
             val v = values[part]
             if (v == null) {
                 view.setBackgroundResource(R.drawable.bg_body_part_cell)
                 label.visibility = View.GONE
+                icon?.imageTintList = null
+                icon?.setColorFilter(0xFF314158.toInt())
             } else {
                 val level = BodyPart12.valueToLevel(v)
                 view.background = makePartCardDrawable(ComfortIconView.getColor(level))
@@ -294,6 +310,8 @@ class SeatDetailActivity : AppCompatActivity() {
                 label.setTextColor(levelColor)
                 label.text = comfortCn(level)
                 label.visibility = View.VISIBLE
+                icon?.clearColorFilter()
+                icon?.setColorFilter(levelColor)
             }
         }
     }
