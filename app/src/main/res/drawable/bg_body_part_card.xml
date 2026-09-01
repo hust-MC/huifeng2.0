@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 身体部位体感状态外框：1194x387 / 弧度 24.96 / 边框 1.56 / 底色 #D6DDE6 / 边框 #000000 6%透明 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#D6DDE6" />
+    <stroke
+        android:width="1.56px"
+        android:color="#0F000000" />
+    <corners android:radius="24.96px" />
+</shape>

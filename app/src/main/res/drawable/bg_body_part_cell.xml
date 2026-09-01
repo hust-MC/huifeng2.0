@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 身体部位单个卡片边框：181x120 / 弧度15.6 / 边框1 / #000000 6% / 底色白色 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#FFFFFF" />
+    <stroke
+        android:width="1px"
+        android:color="#0F000000" />
+    <corners android:radius="15.6px" />
+</shape>

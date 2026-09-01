@@ -21,13 +21,6 @@ class BodyFeelActivity : AppCompatActivity() {
         // 车型座位数：4 / 5 / 6
         private const val SEAT_COUNT = 4
 
-        /**
-         * 是否使用本地 mock 数据。
-         * true  -> 首次拉取用本地构造的 JSON，方便无真机/无信号时调试 UI
-         * false -> 直接走 SDK getComfortLevel() 拿真实数据（默认）
-         */
-        private const val USE_MOCK = true
-
         private val SEGMENT_SENSATIONS = intArrayOf(-2, -1, 0, 1, 2)
 
         private val BORDER_DRAWABLE = R.drawable.bg_energy_segment_border
@@ -101,7 +94,7 @@ class BodyFeelActivity : AppCompatActivity() {
         registerComfortCallback()
 
         // Mock 模式下直接走本地数据，不依赖 SDK 连接状态
-        if (USE_MOCK) {
+        if (MockComfortJson.USE_MOCK) {
             Log.i(TAG, "Mock 模式，跳过 SDK 连接检查，直接加载本地数据")
             loadInitialData()
         } else if (AiCarControlSDK.isConnected()) {
@@ -130,17 +123,17 @@ class BodyFeelActivity : AppCompatActivity() {
      * 首次拉取所有座位舒适度数据并更新界面
      */
     private fun loadInitialData() {
-        Log.i(TAG, "========== 首次拉取所有座位舒适度（USE_MOCK=$USE_MOCK） ==========")
+        Log.i(TAG, "========== 首次拉取所有座位舒适度（USE_MOCK=${MockComfortJson.USE_MOCK}） ==========")
         // Mock 模式下跳过 SDK 调用，避免依赖连接状态
-        val levels: List<String?>? = if (USE_MOCK) null else AiCarControlSDK.getComfortLevel()
+        val levels: List<String?>? = if (MockComfortJson.USE_MOCK) null else AiCarControlSDK.getComfortLevel()
         val positions = visiblePositionsBySeatCount[SEAT_COUNT] ?: emptyList()
 
         // Mock 数据：仅在 USE_MOCK=true 时生效。4个座位分别设为 凉、稍凉、合适、稍暖
-        val mockJson: List<String> = if (USE_MOCK) listOf(
-            jsonFor(ComfortIconView.LEVEL_COOL),            // 主驾 - 凉
-            jsonFor(ComfortIconView.LEVEL_SLIGHTLY_COOL),   // 副驾 - 稍凉
-            jsonFor(ComfortIconView.LEVEL_JUST_RIGHT),      // 后排右 - 合适
-            jsonFor(ComfortIconView.LEVEL_SLIGHTLY_WARM)    // 后排左 - 稍暖
+        val mockJson: List<String> = if (MockComfortJson.USE_MOCK) listOf(
+            MockComfortJson.overall(ComfortIconView.LEVEL_COOL),            // 主驾 - 凉
+            MockComfortJson.overall(ComfortIconView.LEVEL_SLIGHTLY_COOL),   // 副驾 - 稍凉
+            MockComfortJson.overall(ComfortIconView.LEVEL_JUST_RIGHT),      // 后排右 - 合适
+            MockComfortJson.overall(ComfortIconView.LEVEL_SLIGHTLY_WARM)    // 后排左 - 稍暖
         ) else emptyList()
 
         for ((index, pos) in positions.withIndex()) {
@@ -387,17 +380,5 @@ class BodyFeelActivity : AppCompatActivity() {
             Log.w(TAG, "jsonToLevel 解析失败: $json", e)
             null
         }
-    }
-
-    private fun jsonFor(level: Int): String {
-        val ovr = when (level) {
-            ComfortIconView.LEVEL_COOL -> -0.6
-            ComfortIconView.LEVEL_SLIGHTLY_COOL -> -0.2
-            ComfortIconView.LEVEL_JUST_RIGHT -> 0.0
-            ComfortIconView.LEVEL_SLIGHTLY_WARM -> 0.2
-            ComfortIconView.LEVEL_WARM -> 0.6
-            else -> 0.0
-        }
-        return """{"Ovr":$ovr,"Validity":1}"""
     }
 }
